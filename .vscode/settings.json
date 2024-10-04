@@ -24,5 +24,7 @@
   "sonarlint.connectedMode.project": {
     "connectionId": "http-localhost-4000",
     "projectKey": "gregrickaby"
-  }
+  },
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true
 }
