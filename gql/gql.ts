@@ -1,7 +1,5 @@
 /* eslint-disable */
-import * as types from './graphql';
-
-
+import * as types from './graphql'
 
 /**
  * Map of all GraphQL operations in the project.
@@ -14,15 +12,17 @@ import * as types from './graphql';
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-    "\n  query GetAllPosts($first: Int!, $after: String) {\n    posts(where: {status: PUBLISH}, first: $first, after: $after) {\n      edges {\n        cursor\n        node {\n          databaseId\n          title(format: RENDERED)\n          excerpt(format: RENDERED)\n          date\n          slug\n          featuredImage {\n            node {\n              mediaItemUrl\n              altText\n            }\n          }\n        }\n      }\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n  }\n": types.GetAllPostsDocument,
-};
+  '\n  query GetAllPosts($first: Int!, $after: String) {\n    posts(where: {status: PUBLISH}, first: $first, after: $after) {\n      edges {\n        cursor\n        node {\n          databaseId\n          title(format: RENDERED)\n          excerpt(format: RENDERED)\n          date\n          slug\n          featuredImage {\n            node {\n              mediaItemUrl\n              altText\n            }\n          }\n        }\n      }\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n  }\n':
+    types.GetAllPostsDocument
+}
 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query GetAllPosts($first: Int!, $after: String) {\n    posts(where: {status: PUBLISH}, first: $first, after: $after) {\n      edges {\n        cursor\n        node {\n          databaseId\n          title(format: RENDERED)\n          excerpt(format: RENDERED)\n          date\n          slug\n          featuredImage {\n            node {\n              mediaItemUrl\n              altText\n            }\n          }\n        }\n      }\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n  }\n"): typeof import('./graphql').GetAllPostsDocument;
-
+export function graphql(
+  source: '\n  query GetAllPosts($first: Int!, $after: String) {\n    posts(where: {status: PUBLISH}, first: $first, after: $after) {\n      edges {\n        cursor\n        node {\n          databaseId\n          title(format: RENDERED)\n          excerpt(format: RENDERED)\n          date\n          slug\n          featuredImage {\n            node {\n              mediaItemUrl\n              altText\n            }\n          }\n        }\n      }\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n  }\n'
+): typeof import('./graphql').GetAllPostsDocument
 
 export function graphql(source: string) {
-  return (documents as any)[source] ?? {};
+  return (documents as any)[source] ?? {}
 }
