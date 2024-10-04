@@ -1,60 +1,54 @@
 'use client'
 
 import {ArticleCard} from '@/components/ArticleCard'
-import {WP_Query} from '@/lib/api'
-import {Post} from '@/lib/types'
+import type {Post} from '@/gql/graphql'
+import {getAllPosts} from '@/lib/api/queries'
+import {fetchGraphQL} from '@/lib/functions'
 import {useCallback, useState} from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
 /**
- * Blog Archive route.
+ * Blog Archive route with infinite scroll.
  */
-export function BlogArchive({initialPosts}: {initialPosts: Post[]}) {
+export function BlogArchive({
+  initialPosts,
+  initialEndCursor
+}: {
+  initialPosts: Post[]
+  initialEndCursor: string
+}) {
   // Set up state.
   const [posts, setPosts] = useState<Post[]>(initialPosts)
-  const [page, setPage] = useState<number>(2)
+  const [endCursor, setEndCursor] = useState<string | null>(initialEndCursor)
   const [hasMore, setHasMore] = useState<boolean>(true)
   const [loading, setLoading] = useState<boolean>(false)
 
   // Fetch more posts.
   const fetchPosts = useCallback(async () => {
-    // Prevent multiple fetches at the same time.
-    if (loading) return
+    if (loading || !hasMore) return
 
     setLoading(true)
     try {
-      // Set up pagination query.
-      const query = new WP_Query({
-        per_page: 10,
-        page: page,
-        fields: [
-          'id',
-          'slug',
-          'title',
-          'excerpt',
-          'featured_image_data',
-          'date'
-        ],
-        orderby: 'date',
-        order: 'desc'
+      // Fetch next set of posts using the end cursor for pagination.
+      const data = await fetchGraphQL(getAllPosts, {
+        first: 10,
+        after: endCursor
       })
-
-      // Get the next posts.
-      const newPosts = await query.getPosts()
+      const newPosts = data.posts.edges.map((edge: any) => edge.node)
 
       // Update state.
-      if (newPosts.length === 0) {
+      if (newPosts.length === 0 || !data.posts.pageInfo.hasNextPage) {
         setHasMore(false)
       } else {
         setPosts((prevPosts) => [...prevPosts, ...newPosts])
-        setPage((prevPage) => prevPage + 1)
+        setEndCursor(data.posts.pageInfo.endCursor) // Set the new end cursor for the next fetch.
       }
     } catch (error) {
       console.error('Error fetching posts:', error)
     } finally {
       setLoading(false)
     }
-  }, [loading, page])
+  }, [endCursor, loading, hasMore])
 
   return (
     <InfiniteScroll

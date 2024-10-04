@@ -1,15 +1,8 @@
 import {BlogArchive} from '@/components/BlogArchive'
-import {WP_Query} from '@/lib/api'
+import {getAllPosts} from '@/lib/api/queries'
 import config from '@/lib/config'
+import {fetchGraphQL} from '@/lib/functions'
 import {Metadata} from 'next'
-
-const initialQuery = new WP_Query({
-  per_page: 10,
-  page: 1,
-  fields: ['id', 'slug', 'title', 'excerpt', 'featured_image_data', 'date'],
-  orderby: 'date',
-  order: 'desc'
-})
 
 /**
  * Generate metadata.
@@ -28,13 +21,17 @@ export function generateMetadata(): Metadata {
  * Blog Archive.
  */
 export default async function Blog() {
-  // Get the initial posts.
-  const posts = await initialQuery.getPosts()
+  const data = await fetchGraphQL(getAllPosts, {first: 10})
+  const initialPosts = data.posts.edges.map((edge: any) => edge.node)
+  const initialEndCursor = data.posts.pageInfo.endCursor
 
   return (
     <article className="article">
       <h1>Blog</h1>
-      <BlogArchive initialPosts={posts} />
+      <BlogArchive
+        initialPosts={initialPosts}
+        initialEndCursor={initialEndCursor}
+      />
     </article>
   )
 }
