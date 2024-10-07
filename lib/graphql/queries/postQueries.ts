@@ -1,4 +1,4 @@
-import {graphql} from '@/gql'
+import {graphql} from '@/lib/graphql/generated/gql'
 
 /**
  * Get all posts with pagination query.
@@ -15,10 +15,7 @@ export const getAllPosts = graphql(`
           date
           slug
           featuredImage {
-            node {
-              mediaItemUrl
-              altText
-            }
+            ...NodeWithFeaturedImageToMediaItemConnectionEdgeFragment
           }
         }
       }

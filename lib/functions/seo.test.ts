@@ -1,10 +1,9 @@
 import config from '@/lib/config'
-import {yoastSeo} from '@/lib/functions'
 import {mockPost} from '@/lib/mocks'
 
-describe('yoastSeo() tests', () => {
+describe('seoRest() tests', () => {
   it('should return the correct metadata for a post', () => {
-    const metadata = yoastSeo(mockPost)
+    const metadata = seoRest(mockPost)
 
     expect(metadata).toEqual({
       metadataBase: new URL(config.siteUrl),

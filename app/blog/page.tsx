@@ -1,13 +1,12 @@
 import {BlogArchive} from '@/components/BlogArchive'
-import {getAllPosts} from '@/lib/api/queries'
 import config from '@/lib/config'
 import {fetchGraphQL} from '@/lib/functions'
+import {getAllPosts} from '@/lib/graphql'
+import type {Post} from '@/lib/graphql/generated/graphql'
 import {Metadata} from 'next'
 
 /**
  * Generate metadata.
- *
- * @see https://nextjs.org/docs/app/api-reference/functions/generate-metadata#generatemetadata-function
  */
 export function generateMetadata(): Metadata {
   return {
@@ -21,15 +20,15 @@ export function generateMetadata(): Metadata {
  * Blog Archive.
  */
 export default async function Blog() {
-  const data = await fetchGraphQL(getAllPosts, {first: 10})
-  const initialPosts = data.posts.edges.map((edge: any) => edge.node)
-  const initialEndCursor = data.posts.pageInfo.endCursor
+  const {posts} = await fetchGraphQL(getAllPosts, {first: 10})
+  const initialPosts = posts?.edges?.map((edge) => edge?.node) ?? []
+  const initialEndCursor = posts?.pageInfo?.endCursor ?? null
 
   return (
     <article className="article">
       <h1>Blog</h1>
       <BlogArchive
-        initialPosts={initialPosts}
+        initialPosts={initialPosts as Partial<Post>[]}
         initialEndCursor={initialEndCursor}
       />
     </article>

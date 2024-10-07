@@ -1,6 +1,6 @@
 'use client'
 
-import {createComment} from '@/lib/api'
+import {createComment} from '@/lib/rest'
 import {IconLoader} from '@tabler/icons-react'
 import {useState} from 'react'
 

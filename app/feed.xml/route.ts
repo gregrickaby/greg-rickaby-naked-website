@@ -1,5 +1,5 @@
-import {WP_Query} from '@/lib/api'
 import config from '@/lib/config'
+import {WP_Query} from '@/lib/rest'
 import escape from 'xml-escape'
 
 const query = new WP_Query({

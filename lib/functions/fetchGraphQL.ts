@@ -1,4 +1,4 @@
-import type {TypedDocumentString} from '@/gql/graphql'
+import type {TypedDocumentString} from '@/lib/graphql/generated/graphql'
 
 /**
  * Generic operation to fetch data from the WordPress GraphQL API.

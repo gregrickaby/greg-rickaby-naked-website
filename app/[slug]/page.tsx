@@ -1,6 +1,6 @@
 import {Blocks} from '@/components/Blocks'
-import {WP_Query} from '@/lib/api'
-import {yoastSeo} from '@/lib/functions/'
+import {fetchGraphQL, seoGraphQL} from '@/lib/functions'
+import {getPageBySlug} from '@/lib/graphql'
 import {notFound} from 'next/navigation'
 
 /**
@@ -14,39 +14,18 @@ interface PageProps {
 
 /**
  * Generate metadata.
- *
- * @see https://nextjs.org/docs/app/api-reference/functions/generate-metadata#generatemetadata-function
  */
-export async function generateMetadata({params}: PageProps) {
-  const query = new WP_Query({
-    post_type: 'pages',
-    slug: params.slug,
-    fields: ['content', 'title', 'yoast_head_json']
-  })
-
-  // Get the page by slug.
-  const [page] = await query.getPosts()
-
-  // No page? No problem.
-  if (!page) {
-    return notFound()
-  }
-
-  return yoastSeo(page)
+export async function generateMetadata({params}: Readonly<PageProps>) {
+  const {page} = await fetchGraphQL(getPageBySlug, {slug: params.slug})
+  return seoGraphQL(page?.seo ?? {})
 }
 
 /**
  * Single Page.
  */
-export default async function BlogPost({params}: PageProps) {
-  const query = new WP_Query({
-    post_type: 'pages',
-    slug: params.slug,
-    fields: ['content', 'title', 'yoast_head_json']
-  })
-
+export default async function BlogPost({params}: Readonly<PageProps>) {
   // Get the page by slug.
-  const [page] = await query.getPosts()
+  const {page} = await fetchGraphQL(getPageBySlug, {slug: params.slug})
 
   // No page? No problem.
   if (!page) {
@@ -56,9 +35,9 @@ export default async function BlogPost({params}: PageProps) {
   return (
     <article className="article">
       <header>
-        <h1 dangerouslySetInnerHTML={{__html: page.title.rendered}} />
+        <h1 dangerouslySetInnerHTML={{__html: page.title}} />
       </header>
-      <Blocks content={page.content.rendered} />
+      <Blocks content={page.content} />
     </article>
   )
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import {searchQuery} from '@/lib/api/search'
+import {searchQuery} from '@/lib/rest/search'
 import {SearchResults} from '@/lib/types'
 import {IconLoader} from '@tabler/icons-react'
 import {useDebounce} from '@uidotdev/usehooks'

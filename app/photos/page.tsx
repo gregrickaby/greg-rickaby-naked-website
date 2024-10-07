@@ -1,6 +1,6 @@
 import {Gallery} from '@/components/Gallery'
-import {getThreads} from '@/lib/api'
 import config from '@/lib/config'
+import {getThreads} from '@/lib/rest'
 import {IconBrandThreads} from '@tabler/icons-react'
 import {Metadata} from 'next'
 

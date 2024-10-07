@@ -1,14 +1,18 @@
-import type {Post} from '@/graphql/graphql'
 import {formatDate} from '@/lib/functions'
+import type {Post} from '@/lib/graphql/generated/graphql'
 import clsx from 'clsx'
 import Image from 'next/image'
 import Link from 'next/link'
 import styles from './ArticleCard.module.css'
 
+interface ArticleCardProps {
+  post: Partial<Post>
+}
+
 /**
  * Article Card component.
  */
-export function ArticleCard({post}: Readonly<{post: Post}>) {
+export function ArticleCard({post}: Readonly<ArticleCardProps>) {
   return (
     <article
       className={clsx('not-prose', styles.card)}
@@ -19,10 +23,10 @@ export function ArticleCard({post}: Readonly<{post: Post}>) {
         <div className={styles.imageWrap}>
           <Link href={`/blog/${post.slug}`}>
             <Image
-              alt={post.featuredImage?.node.altText}
+              alt={post?.featuredImage?.node?.altText ?? ''}
               className={styles.image}
               height={192}
-              src={post.featuredImage?.node.mediaItemUrl}
+              src={post?.featuredImage?.node?.mediaItemUrl ?? ''}
               width={594}
             />
           </Link>

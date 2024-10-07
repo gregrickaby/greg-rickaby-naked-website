@@ -1,8 +1,8 @@
 import {Blocks} from '@/components/Blocks'
 import {Comments} from '@/components/Comments'
-import {WP_Query} from '@/lib/api'
-import {fetchComments} from '@/lib/api/comments'
-import {formatDate, yoastSeo} from '@/lib/functions'
+import {formatDate} from '@/lib/functions'
+import {WP_Query} from '@/lib/rest'
+import {fetchComments} from '@/lib/rest/comments'
 import {notFound} from 'next/navigation'
 
 /**
@@ -42,7 +42,7 @@ export async function generateMetadata({params}: BlogPostProps) {
     return notFound()
   }
 
-  return yoastSeo(post)
+  return seoRest(post)
 }
 
 /**

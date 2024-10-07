@@ -1,20 +1,35 @@
 import type {CodegenConfig} from '@graphql-codegen/cli'
 
-/**
- * GraphQL Codegen configuration.
- *
- * @see https://the-guild.dev/graphql/codegen/docs/config-reference/codegen-config
- */
+const schemaUrl = process.env.NEXT_PUBLIC_WORDPRESS_GRAPHQL_URL
+
+if (!schemaUrl) {
+  throw new Error(
+    'Missing environment variable: NEXT_PUBLIC_WORDPRESS_GRAPHQL_URL'
+  )
+}
+
 const config: CodegenConfig = {
-  documents: '**/*.tsx',
-  overwrite: true,
-  schema: process.env.NEXT_PUBLIC_WORDPRESS_GRAPHQL_URL,
+  schema: schemaUrl,
+  documents: [
+    './app/**/*.{ts,tsx,graphql}',
+    './lib/graphql/**/*.{ts,tsx,graphql}'
+  ],
+  ignoreNoDocuments: true,
   watch: true,
   generates: {
-    './gql/': {
+    './lib/graphql/generated/': {
       preset: 'client',
+      presetConfig: {
+        fragmentMasking: {unmaskFunctionName: 'getFragmentData'}
+      },
       config: {
         documentMode: 'string'
+      }
+    },
+    './lib/graphql/generated/schema.graphql': {
+      plugins: ['schema-ast'],
+      config: {
+        includeDirectives: true
       }
     }
   }
