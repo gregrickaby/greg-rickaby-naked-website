@@ -8,17 +8,17 @@ import {useCallback, useState} from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
 interface BlogArchiveProps {
-  initialPosts: Partial<Post>[]
+  initialPosts: Post[]
   initialEndCursor: string | null
 }
 
 /**
- * Blog Archive route with infinite scroll.
+ * Blog Archive.
  */
 export function BlogArchive({
   initialPosts,
   initialEndCursor
-}: BlogArchiveProps) {
+}: Readonly<BlogArchiveProps>) {
   // Set up state.
   const [posts, setPosts] = useState<Partial<Post>[]>(initialPosts)
   const [endCursor, setEndCursor] = useState<string | null>(initialEndCursor)

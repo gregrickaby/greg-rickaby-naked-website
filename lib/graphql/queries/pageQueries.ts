@@ -6,14 +6,21 @@ export const getPageBySlug = graphql(`
       databaseId
       content(format: RENDERED)
       title(format: RENDERED)
-      featuredImage {
-        ...NodeWithFeaturedImageToMediaItemConnectionEdgeFragment
-      }
-      author {
-        ...NodeWithAuthorToUserConnectionEdgeFragment
-      }
       date
       modified
+      featuredImage {
+        node {
+          ...MediaItemFragment
+        }
+      }
+      author {
+        node {
+          name
+          avatar {
+            url
+          }
+        }
+      }
       seo {
         ...PostTypeSEOFragment
       }

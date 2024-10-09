@@ -1,3 +1,3 @@
-export * from './authorFragment'
+export * from './commentsFragment'
 export * from './featuredImageFragment'
 export * from './seoFragment'

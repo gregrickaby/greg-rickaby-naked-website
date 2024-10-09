@@ -1,4 +1,5 @@
 import {formatDate} from '@/lib/functions'
+import {sanitizeText} from '@/lib/functions/sanitizeText'
 import type {Post} from '@/lib/graphql/generated/graphql'
 import clsx from 'clsx'
 import Image from 'next/image'
@@ -6,13 +7,17 @@ import Link from 'next/link'
 import styles from './ArticleCard.module.css'
 
 interface ArticleCardProps {
-  post: Partial<Post>
+  post: Post
 }
 
 /**
  * Article Card component.
  */
 export function ArticleCard({post}: Readonly<ArticleCardProps>) {
+  if (!post) {
+    return
+  }
+
   return (
     <article
       className={clsx('not-prose', styles.card)}
@@ -37,7 +42,7 @@ export function ArticleCard({post}: Readonly<ArticleCardProps>) {
             <time dateTime={post.dateGmt}>{formatDate(post.date)}</time>
           </div>
           <Link className={styles.title} href={`/blog/${post.slug}`}>
-            <h3 dangerouslySetInnerHTML={{__html: post.title}} />
+            <h3>{sanitizeText(post.title)}</h3>
           </Link>
           <div
             className={styles.excerpt}

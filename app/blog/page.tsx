@@ -2,8 +2,8 @@ import {BlogArchive} from '@/components/BlogArchive'
 import config from '@/lib/config'
 import {fetchGraphQL} from '@/lib/functions'
 import {getAllPosts} from '@/lib/graphql'
-import type {Post} from '@/lib/graphql/generated/graphql'
 import {Metadata} from 'next'
+import {notFound} from 'next/navigation'
 
 /**
  * Generate metadata.
@@ -21,14 +21,20 @@ export function generateMetadata(): Metadata {
  */
 export default async function Blog() {
   const {posts} = await fetchGraphQL(getAllPosts, {first: 10})
-  const initialPosts = posts?.edges?.map((edge) => edge?.node) ?? []
-  const initialEndCursor = posts?.pageInfo?.endCursor ?? null
+
+  // No posts? Return 404.
+  if (!posts?.edges) {
+    return notFound()
+  }
+
+  const initialPosts = posts.edges.map((edge) => edge.node)
+  const initialEndCursor: string | null = posts?.pageInfo?.endCursor ?? null
 
   return (
     <article className="article">
       <h1>Blog</h1>
       <BlogArchive
-        initialPosts={initialPosts as Partial<Post>[]}
+        initialPosts={initialPosts}
         initialEndCursor={initialEndCursor}
       />
     </article>

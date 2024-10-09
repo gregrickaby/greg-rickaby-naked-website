@@ -1,5 +1,5 @@
 import {formatDate, sanitizeComment} from '@/lib/functions'
-import {Comment} from '@/lib/types'
+import type {Comment} from '@/lib/graphql/generated/graphql'
 import clsx from 'clsx'
 import {CommentForm} from './CommentForm'
 import styles from './Comments.module.css'
@@ -27,7 +27,7 @@ function CommentItem({
   const replies = allComments.filter((reply) => reply.parent === comment.id)
 
   // Sanitize the comment content.
-  const sanitizedContent = sanitizeComment(comment.content.rendered)
+  const sanitizedContent = sanitizeComment(comment.content)
 
   return (
     <>
@@ -40,15 +40,15 @@ function CommentItem({
       >
         <header className={styles.header}>
           <img
-            alt={comment.author_name ?? 'User avatar'}
+            alt={comment.author?.name ?? 'User avatar'}
             className={styles.avatar}
             height={96}
             loading="lazy"
-            src={comment.author_avatar_urls?.['48']}
+            src={comment.author?.url?.['48']}
             width={96}
           />
           <div className={styles.author}>
-            {comment.author_url ? (
+            {comment.author.url ? (
               <a href={comment.author_url} rel="nofollow noopener noreferrer">
                 <h3 className={styles.name}>{comment.author_name}</h3>
               </a>

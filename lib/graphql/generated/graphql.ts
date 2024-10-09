@@ -10340,9 +10340,9 @@ export type WritingSettings = {
   useSmilies?: Maybe<Scalars['Boolean']['output']>;
 };
 
-export type NodeWithAuthorToUserConnectionEdgeFragmentFragment = { __typename?: 'NodeWithAuthorToUserConnectionEdge', node: { __typename?: 'User', name?: string | null, avatar?: { __typename?: 'Avatar', url?: string | null } | null } } & { ' $fragmentName'?: 'NodeWithAuthorToUserConnectionEdgeFragmentFragment' };
+export type CommentFragmentFragment = { __typename?: 'Comment', status?: CommentStatusEnum | null, content?: string | null, databaseId: number, dateGmt?: string | null, author?: { __typename?: 'CommentToCommenterConnectionEdge', node: { __typename?: 'CommentAuthor', url?: string | null, name?: string | null, email?: string | null, avatar?: { __typename?: 'Avatar', url?: string | null, width?: number | null, height?: number | null, size?: number | null } | null } | { __typename?: 'User', url?: string | null, name?: string | null, email?: string | null, avatar?: { __typename?: 'Avatar', url?: string | null, width?: number | null, height?: number | null, size?: number | null } | null } } | null, replies?: { __typename?: 'CommentToCommentConnection', edges: Array<{ __typename?: 'CommentToCommentConnectionEdge', node: { __typename?: 'Comment', content?: string | null, databaseId: number, dateGmt?: string | null, author?: { __typename?: 'CommentToCommenterConnectionEdge', node: { __typename?: 'CommentAuthor', url?: string | null, name?: string | null, email?: string | null, avatar?: { __typename?: 'Avatar', url?: string | null, width?: number | null, height?: number | null, size?: number | null } | null } | { __typename?: 'User', url?: string | null, name?: string | null, email?: string | null, avatar?: { __typename?: 'Avatar', url?: string | null, width?: number | null, height?: number | null, size?: number | null } | null } } | null } }> } | null } & { ' $fragmentName'?: 'CommentFragmentFragment' };
 
-export type NodeWithFeaturedImageToMediaItemConnectionEdgeFragmentFragment = { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', altText?: string | null, sourceUrl?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null } | null } } & { ' $fragmentName'?: 'NodeWithFeaturedImageToMediaItemConnectionEdgeFragmentFragment' };
+export type MediaItemFragmentFragment = { __typename?: 'MediaItem', altText?: string | null, sourceUrl?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null } | null } & { ' $fragmentName'?: 'MediaItemFragmentFragment' };
 
 export type PostTypeSeoFragmentFragment = { __typename?: 'PostTypeSEO', title?: string | null, metaDesc?: string | null, readingTime?: number | null, metaRobotsNofollow?: string | null, metaRobotsNoindex?: string | null, canonical?: string | null, opengraphDescription?: string | null, opengraphTitle?: string | null, opengraphType?: string | null, opengraphUrl?: string | null, opengraphImage?: { __typename?: 'MediaItem', altText?: string | null, sourceUrl?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null } | null } | null } & { ' $fragmentName'?: 'PostTypeSeoFragmentFragment' };
 
@@ -10351,13 +10351,10 @@ export type GetPageBySlugQueryVariables = Exact<{
 }>;
 
 
-export type GetPageBySlugQuery = { __typename?: 'RootQuery', page?: { __typename?: 'Page', databaseId: number, content?: string | null, title?: string | null, date?: string | null, modified?: string | null, featuredImage?: (
-      { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge' }
-      & { ' $fragmentRefs'?: { 'NodeWithFeaturedImageToMediaItemConnectionEdgeFragmentFragment': NodeWithFeaturedImageToMediaItemConnectionEdgeFragmentFragment } }
-    ) | null, author?: (
-      { __typename?: 'NodeWithAuthorToUserConnectionEdge' }
-      & { ' $fragmentRefs'?: { 'NodeWithAuthorToUserConnectionEdgeFragmentFragment': NodeWithAuthorToUserConnectionEdgeFragmentFragment } }
-    ) | null, seo?: (
+export type GetPageBySlugQuery = { __typename?: 'RootQuery', page?: { __typename?: 'Page', databaseId: number, content?: string | null, title?: string | null, date?: string | null, modified?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: (
+        { __typename?: 'MediaItem' }
+        & { ' $fragmentRefs'?: { 'MediaItemFragmentFragment': MediaItemFragmentFragment } }
+      ) } | null, author?: { __typename?: 'NodeWithAuthorToUserConnectionEdge', node: { __typename?: 'User', name?: string | null, avatar?: { __typename?: 'Avatar', url?: string | null } | null } } | null, seo?: (
       { __typename?: 'PostTypeSEO' }
       & { ' $fragmentRefs'?: { 'PostTypeSeoFragmentFragment': PostTypeSeoFragmentFragment } }
     ) | null, hideFeaturedImage?: { __typename?: 'HideFeaturedImage', hideFeaturedImage?: boolean | null } | null } | null };
@@ -10368,10 +10365,26 @@ export type GetAllPostsQueryVariables = Exact<{
 }>;
 
 
-export type GetAllPostsQuery = { __typename?: 'RootQuery', posts?: { __typename?: 'RootQueryToPostConnection', edges: Array<{ __typename?: 'RootQueryToPostConnectionEdge', cursor?: string | null, node: { __typename?: 'Post', databaseId: number, title?: string | null, excerpt?: string | null, date?: string | null, slug?: string | null, featuredImage?: (
-          { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge' }
-          & { ' $fragmentRefs'?: { 'NodeWithFeaturedImageToMediaItemConnectionEdgeFragmentFragment': NodeWithFeaturedImageToMediaItemConnectionEdgeFragmentFragment } }
-        ) | null } }>, pageInfo: { __typename?: 'RootQueryToPostConnectionPageInfo', hasNextPage: boolean, endCursor?: string | null } } | null };
+export type GetAllPostsQuery = { __typename?: 'RootQuery', posts?: { __typename?: 'RootQueryToPostConnection', edges: Array<{ __typename?: 'RootQueryToPostConnectionEdge', cursor?: string | null, node: { __typename?: 'Post', databaseId: number, title?: string | null, excerpt?: string | null, date?: string | null, slug?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: (
+            { __typename?: 'MediaItem' }
+            & { ' $fragmentRefs'?: { 'MediaItemFragmentFragment': MediaItemFragmentFragment } }
+          ) } | null } }>, pageInfo: { __typename?: 'RootQueryToPostConnectionPageInfo', hasNextPage: boolean, endCursor?: string | null } } | null };
+
+export type GetPostBySlugQueryVariables = Exact<{
+  slug: Scalars['ID']['input'];
+}>;
+
+
+export type GetPostBySlugQuery = { __typename?: 'RootQuery', post?: { __typename?: 'Post', databaseId: number, content?: string | null, title?: string | null, date?: string | null, modified?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: (
+        { __typename?: 'MediaItem' }
+        & { ' $fragmentRefs'?: { 'MediaItemFragmentFragment': MediaItemFragmentFragment } }
+      ) } | null, author?: { __typename?: 'NodeWithAuthorToUserConnectionEdge', node: { __typename?: 'User', name?: string | null, avatar?: { __typename?: 'Avatar', url?: string | null } | null } } | null, seo?: (
+      { __typename?: 'PostTypeSEO' }
+      & { ' $fragmentRefs'?: { 'PostTypeSeoFragmentFragment': PostTypeSeoFragmentFragment } }
+    ) | null, hideFeaturedImage?: { __typename?: 'HideFeaturedImage', hideFeaturedImage?: boolean | null } | null, categories?: { __typename?: 'PostToCategoryConnection', edges: Array<{ __typename?: 'PostToCategoryConnectionEdge', node: { __typename?: 'Category', name?: string | null, slug?: string | null } }> } | null, tags?: { __typename?: 'PostToTagConnection', edges: Array<{ __typename?: 'PostToTagConnectionEdge', node: { __typename?: 'Tag', name?: string | null, slug?: string | null } }> } | null, comments?: { __typename?: 'PostToCommentConnection', edges: Array<{ __typename?: 'PostToCommentConnectionEdge', node: (
+          { __typename?: 'Comment' }
+          & { ' $fragmentRefs'?: { 'CommentFragmentFragment': CommentFragmentFragment } }
+        ) }> } | null } | null };
 
 export class TypedDocumentString<TResult, TVariables>
   extends String
@@ -10387,28 +10400,59 @@ export class TypedDocumentString<TResult, TVariables>
     return this.value;
   }
 }
-export const NodeWithAuthorToUserConnectionEdgeFragmentFragmentDoc = new TypedDocumentString(`
-    fragment NodeWithAuthorToUserConnectionEdgeFragment on NodeWithAuthorToUserConnectionEdge {
-  node {
-    name
-    avatar {
+export const CommentFragmentFragmentDoc = new TypedDocumentString(`
+    fragment CommentFragment on Comment {
+  status
+  author {
+    node {
       url
+      name
+      email
+      avatar {
+        url
+        width
+        height
+        size
+      }
+    }
+  }
+  content(format: RENDERED)
+  databaseId
+  dateGmt
+  replies {
+    edges {
+      node {
+        author {
+          node {
+            url
+            name
+            email
+            avatar {
+              url
+              width
+              height
+              size
+            }
+          }
+        }
+        content(format: RENDERED)
+        databaseId
+        dateGmt
+      }
     }
   }
 }
-    `, {"fragmentName":"NodeWithAuthorToUserConnectionEdgeFragment"}) as unknown as TypedDocumentString<NodeWithAuthorToUserConnectionEdgeFragmentFragment, unknown>;
-export const NodeWithFeaturedImageToMediaItemConnectionEdgeFragmentFragmentDoc = new TypedDocumentString(`
-    fragment NodeWithFeaturedImageToMediaItemConnectionEdgeFragment on NodeWithFeaturedImageToMediaItemConnectionEdge {
-  node {
-    altText
-    sourceUrl
-    mediaDetails {
-      height
-      width
-    }
+    `, {"fragmentName":"CommentFragment"}) as unknown as TypedDocumentString<CommentFragmentFragment, unknown>;
+export const MediaItemFragmentFragmentDoc = new TypedDocumentString(`
+    fragment MediaItemFragment on MediaItem {
+  altText
+  mediaDetails {
+    height
+    width
   }
+  sourceUrl(size: MEDIUM)
 }
-    `, {"fragmentName":"NodeWithFeaturedImageToMediaItemConnectionEdgeFragment"}) as unknown as TypedDocumentString<NodeWithFeaturedImageToMediaItemConnectionEdgeFragmentFragment, unknown>;
+    `, {"fragmentName":"MediaItemFragment"}) as unknown as TypedDocumentString<MediaItemFragmentFragment, unknown>;
 export const PostTypeSeoFragmentFragmentDoc = new TypedDocumentString(`
     fragment PostTypeSEOFragment on PostTypeSEO {
   title
@@ -10437,14 +10481,21 @@ export const GetPageBySlugDocument = new TypedDocumentString(`
     databaseId
     content(format: RENDERED)
     title(format: RENDERED)
-    featuredImage {
-      ...NodeWithFeaturedImageToMediaItemConnectionEdgeFragment
-    }
-    author {
-      ...NodeWithAuthorToUserConnectionEdgeFragment
-    }
     date
     modified
+    featuredImage {
+      node {
+        ...MediaItemFragment
+      }
+    }
+    author {
+      node {
+        name
+        avatar {
+          url
+        }
+      }
+    }
     seo {
       ...PostTypeSEOFragment
     }
@@ -10453,23 +10504,13 @@ export const GetPageBySlugDocument = new TypedDocumentString(`
     }
   }
 }
-    fragment NodeWithAuthorToUserConnectionEdgeFragment on NodeWithAuthorToUserConnectionEdge {
-  node {
-    name
-    avatar {
-      url
-    }
+    fragment MediaItemFragment on MediaItem {
+  altText
+  mediaDetails {
+    height
+    width
   }
-}
-fragment NodeWithFeaturedImageToMediaItemConnectionEdgeFragment on NodeWithFeaturedImageToMediaItemConnectionEdge {
-  node {
-    altText
-    sourceUrl
-    mediaDetails {
-      height
-      width
-    }
-  }
+  sourceUrl(size: MEDIUM)
 }
 fragment PostTypeSEOFragment on PostTypeSEO {
   title
@@ -10503,7 +10544,9 @@ export const GetAllPostsDocument = new TypedDocumentString(`
         date
         slug
         featuredImage {
-          ...NodeWithFeaturedImageToMediaItemConnectionEdgeFragment
+          node {
+            ...MediaItemFragment
+          }
         }
       }
     }
@@ -10513,13 +10556,132 @@ export const GetAllPostsDocument = new TypedDocumentString(`
     }
   }
 }
-    fragment NodeWithFeaturedImageToMediaItemConnectionEdgeFragment on NodeWithFeaturedImageToMediaItemConnectionEdge {
-  node {
+    fragment MediaItemFragment on MediaItem {
+  altText
+  mediaDetails {
+    height
+    width
+  }
+  sourceUrl(size: MEDIUM)
+}`) as unknown as TypedDocumentString<GetAllPostsQuery, GetAllPostsQueryVariables>;
+export const GetPostBySlugDocument = new TypedDocumentString(`
+    query GetPostBySlug($slug: ID!) {
+  post(idType: SLUG, id: $slug) {
+    databaseId
+    content(format: RENDERED)
+    title(format: RENDERED)
+    date
+    modified
+    featuredImage {
+      node {
+        ...MediaItemFragment
+      }
+    }
+    author {
+      node {
+        name
+        avatar {
+          url
+        }
+      }
+    }
+    seo {
+      ...PostTypeSEOFragment
+    }
+    hideFeaturedImage {
+      hideFeaturedImage
+    }
+    categories {
+      edges {
+        node {
+          name
+          slug
+        }
+      }
+    }
+    tags {
+      edges {
+        node {
+          name
+          slug
+        }
+      }
+    }
+    comments {
+      edges {
+        node {
+          ...CommentFragment
+        }
+      }
+    }
+  }
+}
+    fragment CommentFragment on Comment {
+  status
+  author {
+    node {
+      url
+      name
+      email
+      avatar {
+        url
+        width
+        height
+        size
+      }
+    }
+  }
+  content(format: RENDERED)
+  databaseId
+  dateGmt
+  replies {
+    edges {
+      node {
+        author {
+          node {
+            url
+            name
+            email
+            avatar {
+              url
+              width
+              height
+              size
+            }
+          }
+        }
+        content(format: RENDERED)
+        databaseId
+        dateGmt
+      }
+    }
+  }
+}
+fragment MediaItemFragment on MediaItem {
+  altText
+  mediaDetails {
+    height
+    width
+  }
+  sourceUrl(size: MEDIUM)
+}
+fragment PostTypeSEOFragment on PostTypeSEO {
+  title
+  metaDesc
+  readingTime
+  metaRobotsNofollow
+  metaRobotsNoindex
+  canonical
+  opengraphDescription
+  opengraphTitle
+  opengraphType
+  opengraphUrl
+  opengraphImage {
     altText
-    sourceUrl
+    sourceUrl(size: LARGE)
     mediaDetails {
       height
       width
     }
   }
-}`) as unknown as TypedDocumentString<GetAllPostsQuery, GetAllPostsQueryVariables>;
+}`) as unknown as TypedDocumentString<GetPostBySlugQuery, GetPostBySlugQueryVariables>;

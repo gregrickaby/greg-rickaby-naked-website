@@ -15,13 +15,72 @@ export const getAllPosts = graphql(`
           date
           slug
           featuredImage {
-            ...NodeWithFeaturedImageToMediaItemConnectionEdgeFragment
+            node {
+              ...MediaItemFragment
+            }
           }
         }
       }
       pageInfo {
         hasNextPage
         endCursor
+      }
+    }
+  }
+`)
+
+/**
+ * Get post by slug query.
+ */
+export const getPostBySlug = graphql(`
+  query GetPostBySlug($slug: ID!) {
+    post(idType: SLUG, id: $slug) {
+      databaseId
+      content(format: RENDERED)
+      title(format: RENDERED)
+      date
+      modified
+      featuredImage {
+        node {
+          ...MediaItemFragment
+        }
+      }
+      author {
+        node {
+          name
+          avatar {
+            url
+          }
+        }
+      }
+      seo {
+        ...PostTypeSEOFragment
+      }
+      hideFeaturedImage {
+        hideFeaturedImage
+      }
+      categories {
+        edges {
+          node {
+            name
+            slug
+          }
+        }
+      }
+      tags {
+        edges {
+          node {
+            name
+            slug
+          }
+        }
+      }
+      comments {
+        edges {
+          node {
+            ...CommentFragment
+          }
+        }
       }
     }
   }
