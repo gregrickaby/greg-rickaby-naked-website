@@ -1,19 +1,5 @@
-import {ArticleCard} from '@/components/ArticleCard'
-import {WP_Query} from '@/lib/api'
+import {Portfolio} from '@/components/Portfolio'
 import Link from 'next/link'
-
-/**
- * The latest posts query.
- *
- * @see https://developer.wordpress.org/rest-api/reference/posts/#arguments
- */
-const latestPosts = new WP_Query({
-  _fields: ['id', 'title', 'slug', 'excerpt', 'featured_image_data', 'date'],
-  order: 'desc',
-  orderby: 'date',
-  post_type: 'posts',
-  per_page: 5
-})
 
 /**
  * The home page route.
@@ -21,8 +7,6 @@ const latestPosts = new WP_Query({
  * @see https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts#pages
  */
 export default async function Home() {
-  const posts = await latestPosts.getPosts()
-
   return (
     <div className="article px-12 lg:px-0">
       <h1>Hello There 👋</h1>
@@ -54,15 +38,7 @@ export default async function Home() {
         living in Southeast Alabama. I&apos;m married with three kids and some
         of my other hobbies include cooking, traveling, and reading.
       </p>
-
-      <h2>Latest Posts</h2>
-      {posts.map((post) => (
-        <ArticleCard key={post.id} post={post} />
-      ))}
-
-      <footer className="mt-8 text-center">
-        <Link href="/blog">See all blog posts</Link>
-      </footer>
+      <Portfolio />
     </div>
   )
 }
